@@ -1,113 +1,131 @@
-const assert = require('assert')
-const linkedlist = require('./linked_list')
+const LinkedList = require('./linked_list')
+const Node = require('./node')
 
-const Node = linkedlist.Node
-const LinkedList = linkedlist.LinkedList
+const _keys    = [ 0, 1,    '1', {1: 0} ],
+      _values  = [ 1, null, '0', {}     ],
+      _nodes   = 4
 
-// var tests = []
-// function setup() {
-//   const SUCCESS = '%s: successful',
-//         ERROR_ASSERT = '%s: failed: assert( %o )'
-//   var test_node_keys = [0, 1, '1', {1: 0}],
-//       test_node_values = [1, null, '0', {}],
-//       test_nodes = Math.min(test_node_keys.length, test_node_values.length)
-//   function success(id) {
-//     console.log(SUCCESS, id)
-//   }
-//   function assert(assertion, id) {
-//     if(!assertion()) {
-//       console.error(ERROR_ASSERT, id, assertion)
-//       // console.log(assertion.SCOPES)
-//       return 1
-//     } else {
-//       return 0
-//     }
-//   }
-//   /* function test() {
-//     var test_name = 'test_name'
-//     assert(() => {}, test_name)
-//     success(test_name)
-//   }
-//   test() */
-//   tests.push(() => {
-//     var test_name = 'test_node_constructor',
-//         results = 0
-//     for(let i = 0; i < test_nodes; i++) {
-//       let node = new Node(test_node_keys[i], test_node_values[i])
-//       results += assert(() => node.key === test_node_keys[i], test_name)
-//       results += assert(() => node.value === test_node_values[i], test_name)
-//     }
-//     if (results == 0) success(test_name)
-//   })
-//   tests.push(() => {
-//     var test_name = 'test_linkedlist_constructor',
-//         results = 0
-//     var list = new LinkedList()
-//     results += assert(() => list.head === null, test_name)
-//     results += assert(() => list.length === 0, test_name)
-//     if (results == 0) success(test_name)
-//   })
-//   tests.push(() => {
-//     var test_name = 'test_insert',
-//         results = 0
-//     var list = new LinkedList()
-//     for(let i = 0; i < test_nodes; i++) {
-//       let old_head = list.head
-//       let node = new Node(test_node_keys[i], test_node_values[i])
-//       list.insert(node)
-//       results += assert(() => list.head === node, test_name)
-//       results += assert(() => node.next === old_head, test_name)
-//     }
-//     if (results == 0) success(test_name)
-//   })
-//   tests.push(() => {
-//     var test_name = 'test_search',
-//         results = 0
-//     var list = new LinkedList(),
-//         nodes = []
-//     for(let i = 0; i < test_nodes; i++) {
-//       let node = new Node(test_node_keys[i], test_node_values[i])
-//       list.insert(node)
-//       nodes.push(node)
-//       results += assert(() => {
-//         let found = list.search(node.key)
-//         return found === node && found.value === node.value
-//       }, test_name)
-//     }
-//     results += assert(() => list.search(test_node_keys[0]) === nodes[0], test_name)
-//     if (results == 0) success(test_name)
-//   })
-//   tests.push(() => {
-//     var test_name = 'test_delete',
-//         results = 0
-//     var list = new LinkedList(),
-//         nodes = []
-//     for(let i = 0; i < test_nodes; i++) {
-//       let node = new Node(test_node_keys[i], test_node_values[i])
-//       list.insert(node)
-//       nodes.push(node)
-//     }
-//     for(let i = 0; i < nodes.length; i++) {
-//       list.delete(nodes[i])
-//       results += assert(() => list.search(nodes[i].key) === null, test_name)
-//     }
-//     if (results == 0) success(test_name)
-//   })
-//   tests.push(() => {
-//     var test_name = 'test_delete_key',
-//         results = 0
-//     var list = new LinkedList(),
-//         nodes = []
-//     for(let i = 0; i < test_nodes; i++) {
-//       let node = new Node(test_node_keys[i], test_node_values[i])
-//       list.insert(node)
-//       nodes.push(node)
-//     }
-//     for(let i = 0; i < nodes.length; i++) {
-//       list.delete_key(test_node_keys[i])
-//       results += assert(() => list.search(test_node_keys[i]) === null, test_name)
-//     }
-//     if (results == 0) success(test_name)
-//   })
-// }
-// function run() { for(test of tests) test() }
+// test('Node has correct <k,v>', () => {
+//   let node = new Node(_keys[0], _values[0])
+//   expect(node.key).toBe(_keys[0])
+//   expect(node.value).toBe(_values[0])
+// })
+//
+// test('Node with no arguments has <k,v> undefined', () => {
+//   let node = new Node()
+//   expect(node.key).toBeUndefined()
+//   expect(node.value).toBeUndefined()
+// })
+//
+// test('Node has null links', () => {
+//   let node = new Node()
+//   expect(node.next).toBe(null)
+//   expect(node.prev).toBe(null)
+// })
+
+describe('new LinkedList', () => {
+  test('has null head', () => {
+    const list = new LinkedList()
+    expect(list.head).toBe(null)
+  })
+  test('has 0 length', () => {
+    const list = new LinkedList()
+    expect(list.length).toBe(0)
+  })
+})
+
+describe('list insert', () => {
+  test('updates list head and length', () => {
+    const list = new LinkedList()
+    const node = new Node()
+    list.insert(node)
+    expect(list.head).toBe(node)
+    expect(list.length).toBe(1)
+    const another_node = new Node()
+    list.insert(another_node)
+    expect(list.head).toBe(another_node)
+    expect(list.length).toBe(2)
+  })
+  test('preserves null links on empty list', () => {
+    const list = new LinkedList()
+    const node = new Node()
+    list.insert(node)
+    expect(node.next).toBe(null)
+    expect(node.prev).toBe(null)
+  })
+  test('updates node next and old head prev', () => {
+    const list = new LinkedList()
+    const head = new Node()
+    list.insert(head)
+    const node = new Node()
+    list.insert(node)
+    expect(node.next).toBe(head)
+    expect(head.prev).toBe(node)
+  })
+})
+
+describe('list search', () => {
+  test('returns null on empty list', () => {
+    const list = new LinkedList()
+    expect(list.search(_keys[0])).toBe(null)
+  })
+  test('returns null when no match is found', () => {
+    const list = new LinkedList()
+    expect(list.search(_keys[0])).toBe(null)
+  })
+  test('returns match on single element list', () => {
+    const list = new LinkedList()
+    const node = new Node(_keys[0], _values[0])
+    list.insert(node)
+    expect(list.search(_keys[0])).toBe(node)
+  })
+  test('returns first match', () => {
+    const list = new LinkedList()
+    const node = new Node(_keys[0], _values[0])
+    list.insert(node)
+    const node_with_same_key = new Node(_keys[0], _values[1])
+    list.insert(node_with_same_key)
+    expect(list.search(_keys[0])).toBe(node_with_same_key)
+  })
+})
+
+describe('list delete', () => {
+  test('sets deleted node links to null', () => {
+    const list = new LinkedList()
+    const node = new Node()
+    list.insert(node)
+    list.delete(node)
+    expect(node.next).toBe(null)
+    expect(node.prev).toBe(null)
+  })
+  test('updates adjacent node links', () => {
+    const list = new LinkedList()
+    const tail_node = new Node()
+    list.insert(tail_node)
+    const node = new Node()
+    list.insert(node)
+    const head_node = new Node()
+    list.insert(head_node)
+    list.delete(node)
+    expect(head_node.next).toBe(tail_node)
+    expect(tail_node.prev).toBe(head_node)
+  })
+  test('properly updates list and next node when deleting head', () => {
+    const list = new LinkedList()
+    const node = new Node()
+    list.insert(node)
+    const head_node = new Node()
+    list.insert(head_node)
+    list.delete(head_node)
+    expect(list.head).toBe(node)
+    expect(node.prev).toBe(null)
+  })
+  test('sets head to null and length to 0 on single element list', () => {
+    const list = new LinkedList()
+    const node = new Node()
+    list.insert(node)
+    list.delete(node)
+    expect(list.head).toBe(null)
+    expect(list.length).toBe(0)
+  })
+})
