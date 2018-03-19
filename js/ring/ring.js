@@ -1,5 +1,3 @@
-// "ring" used informally in this paper will always mean a double pointer ring with a head
-
 function Node(key, value) {
   this.key = key
   this.value = value

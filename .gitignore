@@ -3,3 +3,7 @@ node_modules/
 # no i will not commit the 200KB lock file
 # if someone wants to run the tests they can damn well install jest themselves
 package-lock.json
+
+# yarn
+yarn.lock
+yarn-error.log
