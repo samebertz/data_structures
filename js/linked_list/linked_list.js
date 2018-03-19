@@ -20,7 +20,7 @@ LinkedList.prototype.delete = function(x) {
   if(x.next !== null)
     x.next.prev = x.prev
   if(x.prev === null)
-    this.head = null
+    this.head = x.next
   else
     x.prev.next = x.next
   x.next = null
