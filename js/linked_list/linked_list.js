@@ -1,9 +1,3 @@
-function Node(key, value) {
-  this.key = key
-  this.value = value
-  this.next = null
-  this.prev = null
-}
 function LinkedList() {
   this.head = null
   this.length = 0
@@ -38,4 +32,4 @@ LinkedList.prototype.delete_key = function(k) {
   this.delete(node)
 }
 
-module.exports = exports = { Node, LinkedList }
+module.exports = LinkedList
