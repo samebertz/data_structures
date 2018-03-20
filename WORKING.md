@@ -6,6 +6,5 @@
 + [Winged Edge](js/winged_edge/winged_edge.js)
 
 ### Tests
-+ [Linked List](js/linked_list/linked_list.spec.js)
 + [Ring](js/ring/ring.spec.js)
 + [Winged Edge](js/winged_edge/winged_edge.spec.js)
