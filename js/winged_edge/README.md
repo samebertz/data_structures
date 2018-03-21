@@ -19,7 +19,7 @@ Winged Edge (BFEV) data structure implementation using the original "WINGED EDGE
 
 #### A SUMMARY OF WINGED EDGE OPERATIONS
 Notes:
-1. ***Q*** here is any ***BLOCK***
+1. ***Q*** here is any ***BLOCK***, and ***A*** is "***A different EDGE***"
 2. __FUNCTION.(X,Y)__ notation describes a setter function which somehow associates X with Y
     + e.g. __PVT(V,E)__ sets the ***pvt*** word of ***E*** to point to ***V*** )
 
