@@ -1,10 +1,10 @@
-const assert = require('assert')
-const we = require('./winged_edge')
-
-const WingedEdge  = we.WingedEdge
-const Face        = we.Face
-const Edge        = we.Edge
-const Vertex      = we.Vertex
+const WingedEdge = require('./winged_edge')
+const Body = require('./body')
+const Face = require('./face')
+const Edge = require('./edge')
+const Vertex = require('./vertex')
+const Ring = require('./ring')
+const Node = require('./node')
 
 // test BFEV make operations
 var f = new Face()
