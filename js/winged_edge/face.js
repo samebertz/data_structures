@@ -1,3 +1,4 @@
+const Node = require('./node')
 function Face() {
   this.ped = null
 }

@@ -1,3 +1,4 @@
+const Node = require('./node')
 function Edge() {
   this.nface = this.pface = null
   this.nvt   = this.pvt   = null

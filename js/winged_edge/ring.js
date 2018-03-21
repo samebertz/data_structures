@@ -3,7 +3,9 @@ const Node = require('./node')
 // "ring" used informally in this paper will always mean a double pointer ring with a head
 function Ring(head) {
   this.head = head
-  this.length = 0
+  this.head.next = this.head
+  this.head.prev = this.head
+  this.length = 1
 }
 // don't need key search at the moment, don't even have nodes with keys
 // Ring.prototype.search = function(k) {
@@ -45,4 +47,4 @@ Ring.prototype.delete = function(x) {
   // }
 }
 
-module.exports = { Ring }
+module.exports = Ring
