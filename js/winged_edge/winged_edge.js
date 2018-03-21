@@ -1,6 +1,7 @@
 const Node = require('./node')
 const Ring = require('./ring')
 
+const Body = require('./body')
 const Face = require('./face')
 const Edge = require('./edge')
 const Vertex = require('./vertex')
@@ -12,34 +13,29 @@ const TYPES = {
   VERTEX: 2
 }
 
-// function Face() {
-//   this.type = TYPES.FACE
-//   this.nface = this.pface = null
-//   this.ped = null
-// }
-
-// function Edge() {
-//   this.type = TYPES.EDGE
-//   this.nface = this.pface = null
-//   this.ned = this.ped = null
-//   this.nvt = this.pvt = null
-//   this.ncw = this.pcw = null
-//   this.nccw = this.pccw = null
-// }
-
-// function Vertex(x, y, z) {
-//   this.x = x
-//   this.y = y
-//   this.z = z
-//   this.type = TYPES.VERTEX
-//   this.ped = null
-//   this.nvt = this.pvt = null
-// }
-
-function WingedEdge(body) {
-  this.faces = new Ring(body)
-  this.edges = new Ring(body)
-  this.vertices = new Ring(body)
+function MKF(WE) {
+  const f = new Face
+  // console.log('%O', f)
+  f.id = WE.faces.length
+  // console.log('%O', f)
+  WE.faces.insert(f)
+  // console.log('%O', f)
+}
+function MKE(WE) {
+  const e = new Edge
+  e.id = WE.edges.length
+  WE.edges.insert(e)
+}
+function MKV(WE) {
+  const v = new Vertex
+  v.id = WE.vertices.length
+  WE.vertices.insert(v)
 }
 
-module.exports = { WingedEdge, Face, Edge, Vertex , TYPES}
+function WingedEdge() {
+  this.faces = new Ring(new Body)
+  this.edges = new Ring(new Body)
+  this.vertices = new Ring(new Body)
+}
+
+module.exports = { WingedEdge, MKF, MKE, MKV, TYPES}
