@@ -11,6 +11,7 @@ const TYPES = {
   FACE: 0,
   EDGE: 1,
   VERTEX: 2
+const TYPES = require('./constants')
 }
 
 function MKF(WE) {
@@ -39,3 +40,4 @@ function WingedEdge() {
 }
 
 module.exports = { WingedEdge, MKF, MKE, MKV, TYPES}
+module.exports = { WingedEdge, MKF, MKE, MKV}
