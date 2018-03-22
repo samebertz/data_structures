@@ -20,4 +20,15 @@ Ring.prototype.delete = function(x) {
   x.prev = null
   this.length --
 }
+// TEMP: pretty print
+Ring.prototype.pp = function() {
+  let cur = this.head, arr = []
+  arr.push('HEAD '+cur.pp())
+  while(!Object.is((cur = cur.next), this.head)) {
+      arr.push(cur.pp())
+  }
+  let str = arr.join(' => ')
+  str += ' => HEAD'
+	return str
+}
 module.exports = Ring
