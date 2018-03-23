@@ -6,11 +6,6 @@ const Face = require('./face')
 const Edge = require('./edge')
 const Vertex = require('./vertex')
 
-const TYPES = {
-  BODY: -1,
-  FACE: 0,
-  EDGE: 1,
-  VERTEX: 2
 const TYPES = require('./constants')
 }
 
@@ -39,5 +34,4 @@ function WingedEdge() {
   this.vertices = new Ring(new Body)
 }
 
-module.exports = { WingedEdge, MKF, MKE, MKV, TYPES}
 module.exports = { WingedEdge, MKF, MKE, MKV}
