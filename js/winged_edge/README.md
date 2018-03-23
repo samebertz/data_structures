@@ -21,7 +21,7 @@ Quote blocks are directly from the paper, reproduced for readability and easy re
 | +5 |              |              | nccw, pccw   |          |
 -->
 
-### A SUMMARY OF WINGED EDGE OPERATIONS
+### The Winged Edge Operations
 Notes:
 1. ***Q*** here is any ***BLOCK***, and ***A*** is "***A different EDGE***"
 2. __FUNCTION.(X,Y)__ notation describes a setter function which somehow associates X with Y
@@ -32,8 +32,8 @@ Notes:
 <pre>
 DYNAMIC STORAGE ALLOCATION
 
-1. Q ← GETBLK(SIZE);
-2. RELBLK(Q, SIZE);
+  1. Q ← GETBLK(SIZE);
+  2. RELBLK(Q, SIZE);
 </pre>
 
 > " At the very bottom, of what is becoming a rather deep nest of
@@ -54,10 +54,10 @@ DYNAMIC STORAGE ALLOCATION
 <pre>
 BFEV MAKE & KILL OPERATIONS
 
-1. BNEW ← MKB(B);		KLB(BNEW);
-2. FNEW ← MKF(B);		KLF(FNEW);
-3. ENEW ← MKE(B);		KLE(ENEW);
-4. VNEW ← MKV(B);		KLV(VNEW);
+  1. BNEW ← MKB(B);		KLB(BNEW);
+  2. FNEW ← MKF(B);		KLF(FNEW);
+  3. ENEW ← MKE(B);		KLE(ENEW);
+  4. VNEW ← MKV(B);		KLV(VNEW);
 </pre>
 
 > " Just above the free storage routines are the four pairs of
@@ -83,11 +83,11 @@ BFEV MAKE & KILL OPERATIONS
 <pre>
 FETCH LINK AND STORE LINK OPERATIONS
 
-1. F ← NFACE(Q);	F ← PFACE(Q);	NFACE.(F, Q);	PFACE.(F, Q);
-2. E ← NED(Q);		E ← PED(Q);		NED.(E, Q);		PED.(E, Q);
-3. V ← NVT(Q);		V ← PVT(Q);		NVT.(V, Q);		PVT.(V, Q);
-4. A ← NCW(E);		A ← PCW(E);		NCW.(A, E);		PCW.(A, E);
-5. A ← NCCW(E);		A ← PCCW(E);	NCCW.(A, E);	PCCW.(A, E);
+  1. F ← NFACE(Q);	F ← PFACE(Q);	NFACE.(F, Q);	PFACE.(F, Q);
+  2. E ← NED(Q);		E ← PED(Q);		NED.(E, Q);		PED.(E, Q);
+  3. V ← NVT(Q);		V ← PVT(Q);		NVT.(V, Q);		PVT.(V, Q);
+  4. A ← NCW(E);		A ← PCW(E);		NCW.(A, E);		PCW.(A, E);
+  5. A ← NCCW(E);		A ← PCCW(E);	NCCW.(A, E);	PCCW.(A, E);
 </pre>
 
 > " Each of the fetch link and store link operations named in the
@@ -109,8 +109,8 @@ FETCH LINK AND STORE LINK OPERATIONS
 <pre>
 WING LINK OPERATIONS
 
-1. WING(E1, E2);
-2. INVERT(E);
+  1. WING(E1, E2);
+  2. INVERT(E);
 </pre>
 
 > " The WING operation stores edge pointers into edges so that
@@ -128,13 +128,13 @@ WING LINK OPERATIONS
 <pre>
 PERIMETER FETCH OPERATIONS
 
-1. E ← ECW(E, Q);
-2. E ← ECCW(E, Q);
-3. F ← FCW(E, V);
-4. F ← FCCW(E, V);
-5. V ← VCW(E, F);
-6. V ← VCCW(E, F);
-7. Q ← OTHER(E, Q);
+  1. E ← ECW(E, Q);
+  2. E ← ECCW(E, Q);
+  3. F ← FCW(E, V);
+  4. F ← FCCW(E, V);
+  5. V ← VCW(E, F);
+  6. V ← VCCW(E, F);
+  7. Q ← OTHER(E, Q);
 </pre>
 
 > " There are seven Perimeter fetch primitives, which when given
@@ -190,10 +190,10 @@ PERIMETER FETCH OPERATIONS
 <pre>
 PARTS TREE OPERATIONS.
 
-1. B ← PART(B);		B ← COPART(B);
-2. B ← BODY(B);		B ← SUPART(B);
-3. ATT(B1, B2);		ATTACH(B1, B2);
-4. DET(B);				DETACH(B);
+  1. B ← PART(B);		B ← COPART(B);
+  2. B ← BODY(B);		B ← SUPART(B);
+  3. ATT(B1, B2);		ATTACH(B1, B2);
+  4. DET(B);				DETACH(B);
 </pre>
 
 > " As shown in figure 2,1, each body node has two parts-tree
@@ -206,7 +206,7 @@ PARTS TREE OPERATIONS.
     the parts list. The negative pointer at the end of a parts list
     points back to the original body, which is the supra-part or "supart"
     of all those bodies in that list.<br>
-    The parts may be accessed by its link names PART and COPART.
+    " The parts may be accessed by its link names PART and COPART.
     Also the SUPART of a body returns the (positive) pointer to the
     supart of a body. The BODY operation returns the body to which a face
     edge or vertex belongs; this might be found by CDR'ing a FEV ring
@@ -215,7 +215,7 @@ PARTS TREE OPERATIONS.
     to which the edge belongs, and since each face and vertex points at
     an edge, the body of an FEV entity can be retrieved by fetching only
     one or two links.<br>
-    The parts-tree is altered by the DET(B) operation which
+    " The parts-tree is altered by the DET(B) operation which
     removes a body B from its supart and leaves it hanging free; and the
     ATT(B1,B2) operation which places a free body B1 into the parts list
     of a body B2. Since bodies are made attached to the world body and
@@ -225,3 +225,232 @@ PARTS TREE OPERATIONS.
     ATT's it to the world; and the ATTACH(B1,B2) operation will DET B1
     from its supart and attach it to a new supart. In normal (one world)
     circumstances one only needs to use ATTACH to build things. "
+
+### Primitives on Polyhedra
+
+> " In this section a number of primitives for doing things to
+    polyhedra are explained. Although these primitives are currently
+    implemented using the winged edge data structure, they do not require
+    a particular polyhedron representation. Indeed, many of these
+    primitives were originally implemented in a LEAP polyhedron
+    representation very similar to that of Falk, Feldman and Paul
+    [reference 5]. Thus, the primitives of this section are on a level
+    logically independent from the operations of the previous section.<br>
+    " Another aspect of these primitives is that they can be used
+    as the basis of a "graphics language" or more accurately as a package
+    of subroutines for geometric modeling. In this vein, the primitives
+    are currently collected as a package called GEOMES for Geometric
+    Modeling Embedded in SAIL; and as GEOMEL, Geometric Modeling Embedded
+    in LISP. A third language, called GEOMED, arises out of the command
+    language of a geometric model editor based on the primitives.<br>
+    " The primitives are shown in four groups in the summary. The
+    first group, the Euler Primitives, were Inspired by Coxeter's proof
+    of Euler's formula, section 10.3 of [reference 2]. Although the proof
+    only required three primitives, additional ones of the same ilk were
+    developed for convenience. The second group is composed of some
+    polyhedron primitives that were coded using the Euler primitives. The
+    third group is for primitives that move bodies, faces, edges and
+    vertices; or compute geometric values such as length and volume, This
+    group is underdeveloped for two reasons: one, because I have done
+    these computations ad hoc to date; and two, because they imply the
+    subject of animation which is large and difficult and not of central
+    importance to vision. With the exception of the camera, my worlds are
+    nearly (but not absolutely) static. A less impoverished geometric
+    group will be presented in the future. The final group, has three
+    well developed primitives for making 2D images; and several
+    primitives that when finished will realize part of the vision system
+    that I am trying to build. "
+
+#### Euler Primitives
+
+<pre>
+A. EULER PRIMITIVES
+
+   1. BNEW 	← MKBFV;			 	 make a body, face & vertex.
+   2. KLBFEV(Q); 						 kill a body & all its pieces.
+   3. VNEW 	← MKEV(F,V); 		 make edge & vertex.
+   4. ENEW 	← MKFE(V1,F,V2); make face & edge.
+   5. VNEW 	← ESPLIT(E); 		 split an edge.
+   6. F			← KLFE(ENEW); 	 kill face & edge leaving a face.
+   7. E 		← KLEV(VNEW); 	 kill edge & Vertex leaving an edge.
+   8. V 		← KLVE(ENEW); 	 kill vertex & edge leaving a vertex.
+   9. B 		← GLUE(F1,F2); 	 glue two faces together.
+  10. PNEW 	← UNGLUE(E); 		 unglue along a seam containing E.
+</pre>
+
+> " As mention above, the Euler Primitives are based on the Euler
+    Equation `F-E+V = 2*B-2*H;` where F, E, V, B and H stand for the number
+    of faces, edges, vertices, bodies and handles that exist. The term
+    "handle" comes from topology, and is the number of well formed holes
+    in a surface; a sphere has no handles, a torus has one handle, and an
+    IBM flowcharting template has 26 handles. The Euler equation
+    restricts the possible topologies of FEV graphs that can be
+    polyhedra; although such Eulerian polyhedra do not necessarily
+    correspond to what we normally call a solid classical polyhedron.
+    Strict adherence to constructing a polyhedron that satisfies Euler
+    equation `F - E + V = 2*B - 2*H` would require only four primitives; "
+
+<pre>
+																		+F -E +V = 2*B - 2*H
+1. 	Make Body, Face and Vertex 			+1....+1....+1......
+2. 	Make Edge and Vertex. 					...-1 +1............
+3. 	Make Face and Edge. 						+1 -1...............
+4. 	Glue two faces of one body. 		-2 +N -N............
+4.' Glue two faces of two bodies. 	-2 +N -N....-1......
+</pre>
+
+> " However, the four corresponding destructive primitives are also
+    possible and desirable:
+
+<pre>
+																		+F -E +V = 2*B - 2*H
+1. 	Kill Body, Face and Vertex			+1....+1....+1......
+2. 	Kill Edge and Vertex. 					...-1 +1............
+3. 	Kill Face and Edge. 						+1 -1...............
+4. 	Unglue along a seam. 						-2 +N -N..........-1
+4.' Unglue along a seam. 						-2 +N -N....-1......
+</pre>
+
+> " And finally the operation of splitting an edge at a midpoint into two
+    edges became so important in forming T-Joints during hidden line
+    elimination that the ESPLIT primitive was Introduced in place of the
+    equivalent KLFE, MKEV, MKFE sequence.<br>
+    " In using the Euler primitives, some non-classical polyhedra
+    are tolerated as transitional states of the construction; these
+    transitional states are called:
+<pre>
+		Seminal Polyhedron,
+    Wire Polyhedron.
+    Lamina Polyhedron.
+    Shell Polyhedron.
+    Face with Wire Spurs on its perimeter.
+</pre>
+>   A seminal polyhedron is like a point; a wire polyhedron is linear
+    with two ends like a single piece of wire; lamina and shell polyhedra
+    are surfaces, and the picturesque phrase about spurs is a restriction
+    on how faces are dissected into more faces. These terms will be
+    explained in more detail when they are needed. "
+
+`BNEW ← MKBFV;` Make Seminal Body.
+> " The MKBFV primitive returns a body with one face and one
+    vertex and no edges. Other bodies are formed by applying primitives
+    to the seminal MKBFV body. The seminal body is initially attached as
+    a part of the world. "
+
+`KLBFEV(BNEW);` Kill Body and all its pieces.
+> " The KLBFEV primitive will detach and delete from memory the
+    body given as an argument as well as all its faces, edges, vertices
+    and sub-parts. "
+
+`VNEW ← MKEV(F,V);` Make an edge and a vertex.
+> " The MKEV primitive takes a face, F, and a vertex, V, of F's
+    perimeter and it creates a new edge, ENEW, and a new vertex, VNEW.
+    ENEW and VNEW are called a "wire spur" at V on F. MKEV returns the
+    newly made vertex, VNEW; ENEW can be reached since PED(VNEW) is always ENEW. Only one wire spur is allowed at V on F at a time.<br>
+    " When applied to the face of a seminal body, MKEV forms the
+    special polyhedron called a "wire" and returns the new vertex as the
+    "negative" end of the wire. A wire polyhedron is illustrated in
+    figure 3.1. When applied to the negative end of a wire, MKEV extends
+    the wire: however if applied to any other vertex of the wire, MKEV
+    refuses to change anything and merely returns its vertex argument. "
+
+<pre>
+Figure 3.1 - A Wire Polyhedron. 				Figure 3.2 - VNEW ← MKEV(F,V);
+
+	 seminal vertex  ● V1 													+V
+	 positive end   +|  of wire.										/|\
+									 | E1													 / |←←←←ENEW spur.
+									-|														/  |  \
+									 ● V2												 / -VNEW \
+									+|													/					\
+									 | E2											 /		 F		 \
+	 negative end   -|  of wire.							/							\
+	 latest vertex   ● V3										 ●---------------●
+</pre>
+
+`ENEW ← MKFE(V1,F,V2);`
+> " The MKFE primitive can be thought of as a face split. Given
+    a face and two of its vertices, MKFE forms a new face on the
+    clockwise side of the line V1 to V2 leaving the old face on the
+    counter clockwise side. V1 becomes the PVT of ENEW, V2 becomes the
+    NVT of ENEW, F becomes the PFACE of ENEW and FNEW becomes the NFACE
+    of ENEW; also ENEW becomes the PED of F and FNEW. "
+
+<pre>
+Figure 3.3 - MKFE and KLFE.
+
+		 BEFORE MKFE					 AFTER ENEW MKFE(V1,F,V2)
+      ●				●										●				●
+		 / \		 / \								 / \		 / \
+		/		\		/		\								/		\		/		\
+	 /		 \ /		 \						 /		 \ /		 \
+	/				● 			\						/			 +V1			\
+ /								 \				 / -FNEW	|		+F	 \
+●					F					●				●					|←←←ENEW	●
+ \								 /				 \				|				 /
+	\				●				/						\			 -V2			/
+	 \		 / \		 /						 \		 / \		 /
+		\		/		\		/								\		/		\		/
+		 \ /		 \ /								 \ /		 \ /
+      ●				●										●				●
+  AFTER F←KLFE(ENEW);						 BEFORE KLFE
+</pre>
+
+> " MKFE is also used to join the two ends of a wire polyhedron
+    to form a "lamina"; or the two ends of wire spurs to split a face; or
+    an end of a wire spur and a regular perimeter vertex to split a face.
+    A "lamina polyhedron" has only two faces and thus no volume. "
+
+##### Euler Examples
+> " The use of the primitives discussed so far is illustrated by
+    the example subroutines in figure 3.4 on page 29. The make cube
+    subroutine starts by placing a seminal vertex at (1,1,1); Then a wire
+    of three edges is made using the MKEV primitive. As the code implies,
+    MKEV places its new vertex at the locus of the old one. The ends of
+    the wire are joined with a MKFE to form a lamina polyhedron, then a
+    spur is placed on each of the vertices of the lamina, and finally the
+    spurs are joined.<br>
+    " The pyramid example is more realistic, since polyhedra are
+    not generated ex nihil, but rather arise out of the vision routines
+    and the geometric editor. PYRAMID takes a face as an argument (which
+    is assumed to have no spurs) and runs a spur from one vertex to the
+    middle of the faces, then all the remaining vertices of the face are
+    joined to that spur to form a pyramid. "
+
+`V ← ESPLIT(E);` Edge Split.
+> " This primitive splits an edge by making a new vertex and a
+    new edge. Its implementation is very similar to the midpoint example
+    on page 19. ESPLIT is heavily used in the hidden line eliminator. "
+
+`F ← KLFE(E.EW);` Kill Face Edge.
+> " This primitive kills a face and an edge leaving one face.
+    Since this primitive is intended to be an inverse of MKFE, the NFACE
+    of ENEW is killed. However the NFACE and PFACE of an edge may be
+    swapped by using the INVERT(E) primitive. See Figure 3.3 for KLFE. "
+
+`E ← KLEV(VNEW);` Kill Edge Vertex.
+> " This primitive kills an edge and a vertex leaving one edge.
+    This primitive will eliminate spurs made with MKEV and midpoints made
+    with ESPLIT; in a pure form it would have to leave vertices with a
+    valence greater than two untouched, however it in face "un-pyramids"
+    them with a series of KLFE's and then kills the remaining spur.
+
+`V ← KLVE(ENEW);` Kill Vertex Edge.
+> " This primitive kills a vertex and an edge leaving one vertex.
+    This primitive is the face-vertex dual of KLFE, namely instead of
+    killing NFACE of E and fixing up PFACE's perimeter, KLEV kills the
+    NVT of E and fixes up PVT of E's perimeter.
+
+`B ← GLUE(F1,F2);` Glue two faces.
+> " This primitive glues two faces together forming once new body
+    out of two old ones (the body of F1 survives) or forming a handle on
+    the given body. The number of edges in the two faces must be the same
+    and their orientation should be opposite (exterior to exterior).
+
+`BNEW ← UNGLUE(E);` Unglue along seam. \*not implemented.
+> " This primitive unglues along the seam containing E. The
+    UNGLUE primitive requires that a loop of edges be marked as a "seam"
+    along which unglue will form two opposite faces. The marks are made
+    in the temporary type bit in the edge nodes of the given body. If
+    the cut forms two disjoint bodies then a new body is made on the
+    NFACE side of the original E argument. "
