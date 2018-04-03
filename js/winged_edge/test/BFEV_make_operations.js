@@ -14,9 +14,8 @@ function make_component(B, C) {
   B[C.name.toLowerCase()+'s'].insert(c)
   return c
 }
-function kill_component(C, T) {
-  console.log(C.__proto__.constructor.name)
-  // GETB(C)[C.name.toLowerCase()+'s'].delete(C)
+function kill_component(C, Type) {
+  GETB(C)[Type.name.toLowerCase()+'s'].delete(C)
 }
 function MKF(B) {
   return make_component(B, Face)
