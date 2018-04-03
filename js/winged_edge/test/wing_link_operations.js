@@ -1,4 +1,6 @@
 function wing(E1, E2) {
+  // console.log('E1: '+E1.pp_links())
+  // console.log('E2: '+E2.pp_links())
   // taking advantage of the symmetry here
   // ? commutativity of the binary functions ?
   // or something... anyway essentially there's

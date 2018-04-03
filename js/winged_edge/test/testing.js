@@ -101,16 +101,20 @@ let test_mkev_enew3 = test_mkev_vnew3.ped
 // console.log(test_bfv.faces.pp())
 // console.log(test_bfv.edges.pp())
 // console.log(test_bfv.vertexs.pp())
-let test_mkev_vnew4 = Euler.MKEV(test_bfv.nface, test_mkev_vnew3)
+// let test_mkev_vnew4 = Euler.MKEV(test_bfv.nface, test_mkev_vnew3)
 // console.log(test_mkev_vnew4.pp())
-let test_mkev_enew4 = test_mkev_vnew4.ped
+// let test_mkev_enew4 = test_mkev_vnew4.ped
 // console.log(test_mkev_enew3.pp_links())
 // console.log(test_mkev_enew4.pp_links())
-let test_mkfe_enew = Euler.MKFE(test_bfv.nvt, test_bfv.nface, test_mkev_vnew4)
+let test_mkfe_enew = Euler.MKFE(test_bfv.nvt, test_bfv.nface, test_mkev_vnew3)
 console.log(test_mkfe_enew.pp())
 console.log(test_mkfe_enew.pp_links())
 let test_mkfe_fnew = test_mkfe_enew.nface
 console.log(test_mkfe_fnew.pp())
+let test_klfe_f = Euler.KLFE(test_mkfe_enew)
+console.log(test_mkfe_fnew.pp())
+console.log(Object.is(test_bfv.nface, test_klfe_f))
+console.log(test_klfe_f.pp())
 console.log('done testing euler_primitives\n========')
 
 // =============
