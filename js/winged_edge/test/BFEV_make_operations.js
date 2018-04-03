@@ -3,6 +3,8 @@
 /***/ const Edge = require('./primitives/edge')
 /***/ const Vertex = require('./primitives/vertex')
 
+const GETB = require('./parts_tree_accessing').GETB
+
 function MKB() {
   return new Body
 }

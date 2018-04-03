@@ -3,6 +3,7 @@ const MKB = BFEV_MAKE.MKB,
       MKF = BFEV_MAKE.MKF,
       MKE = BFEV_MAKE.MKE,
       MKV = BFEV_MAKE.MKV
+const GETB = require('./parts_tree_accessing').GETB
 const Fetch = require('./perimeter_fetch_operations')
 const Link = require('./wing_link_operations')
 const TYPES = require('./constants')
@@ -15,27 +16,6 @@ function MKBFV() {
   return bnew
 }
 // 2. KLBFEV(Q); 						kill a body & all its pieces.
-
-// TEMP
-function GETB(Q) {
-  // console.log(Q.pp())
-  switch(Q.type) {
-    case TYPES.EDGE:
-      // console.log('getting pbody from edge')
-      return Q.pbody
-    case TYPES.FACE:
-    case TYPES.VERTEX:
-      // console.log('searching for ring head')
-      if(Q.ped) return Q.ped.pbody
-      else
-        while(Q.type !== TYPES.BODY) {
-          Q = Q.next
-        }
-        return Q.pbody
-    default:
-      return null
-  }
-}
 
 // 3. VNEW 	← MKEV(F,V); 		make edge & vertex.
 function MKEV(F, V) {
