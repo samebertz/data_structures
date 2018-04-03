@@ -422,7 +422,7 @@ Figure 3.3 - MKFE and KLFE.
     new edge. Its implementation is very similar to the midpoint example
     on page 19. ESPLIT is heavily used in the hidden line eliminator. "
 
-`F ← KLFE(E.EW);` Kill Face Edge.
+`F ← KLFE(ENEW);` Kill Face Edge.
 > " This primitive kills a face and an edge leaving one face.
     Since this primitive is intended to be an inverse of MKFE, the NFACE
     of ENEW is killed. However the NFACE and PFACE of an edge may be
