@@ -12,6 +12,10 @@ function make_component(B, C) {
   B[C.name.toLowerCase()+'s'].insert(c)
   return c
 }
+function kill_component(C, T) {
+  console.log(C.__proto__.constructor.name)
+  // GETB(C)[C.name.toLowerCase()+'s'].delete(C)
+}
 function MKF(B) {
   return make_component(B, Face)
 }
@@ -23,4 +27,13 @@ function MKE(B) {
 function MKV(B) {
   return make_component(B, Vertex)
 }
-module.exports = {MKB, MKF, MKE, MKV}
+function KLF(F) {
+  return kill_component(F, Face)
+}
+function KLE(E) {
+  return kill_component(E, Edge)
+}
+function KLV(V) {
+  return kill_component(V, Vertex)
+}
+module.exports = {MKB, MKF, MKE, MKV, KLF, KLE, KLV}
