@@ -67,8 +67,8 @@ function MKEV(F, V) {
 
 // 4. ENEW 	← MKFE(V1,F,V2); make face & edge.
 function MKFE(V1, F, V2) {
-  console.log('V1: ',V1.pp())
-  console.log('V2: ',V2.pp())
+  // console.log('V1: ',V1.pp())
+  // console.log('V2: ',V2.pp())
   const pbody = GETB(F)
   const fnew = MKF(pbody)
   const enew = MKE(pbody)
@@ -77,18 +77,18 @@ function MKFE(V1, F, V2) {
   // const _ecw = Fetch.V.ECW(enew, V1)
   enew.pface = F
   enew.nface = fnew
-  console.log(enew.pp_links())
+  // console.log(enew.pp_links())
   F.ped = enew
   fnew.ped = enew
   // get wings of new edge
   // first, get pcw by finding edge shared by V1 and F whose clockwise face is F
   // start at an edge connected to V1
   let E1 = V1.ped
-  console.log('E1: '+E1.pp_links())
+  // console.log('E1: '+E1.pp_links())
   // and also keep track of the "old" next edge
   let E2 = Fetch.V.ECW(E1, V1) || E1
   // console.log(E2.pp())
-  console.log('E2: '+(Object.is(E2, E1)?'E1':E2.pp_links()))
+  // console.log('E2: '+(Object.is(E2, E1)?'E1':E2.pp_links()))
   // stop if the current edge has clockwise face of F
   // console.log('FCW(E1,V1) = ',Fetch.V.FCW(E1, V1).pp())
   while(!Object.is(Fetch.V.FCW(E1, V1), F)) {
@@ -99,9 +99,9 @@ function MKFE(V1, F, V2) {
   }
   // do the same for V2
   let E3 = V2.ped
-  console.log('E3: '+E3.pp_links())
+  // console.log('E3: '+E3.pp_links())
   let E4 = Fetch.V.ECW(E3, V2) || E3
-  console.log('E4: '+(Object.is(E4, E3)?'E3':E4.pp_links()))
+  // console.log('E4: '+(Object.is(E4, E3)?'E3':E4.pp_links()))
   // console.log('FCW(E3,V2) = ',Fetch.V.FCW(E3, V2).pp())
   while(!Object.is(Fetch.V.FCW(E3, V2), F)) {
     E3 = E4
@@ -144,17 +144,17 @@ function MKFE(V1, F, V2) {
   // console.log('E4: '+E4.pp_links())
   // then set the wing links for ENEW
   Link.wing(E1, enew)
-  console.log('E1: '+E1.pp_links())
+  // console.log('E1: '+E1.pp_links())
   // console.log('ENEW: '+enew.pp_links())
   Link.wing(E2, enew)
-  console.log('E2: '+(Object.is(E2, E1)?'E1':E2.pp_links()))
+  // console.log('E2: '+(Object.is(E2, E1)?'E1':E2.pp_links()))
   // console.log('ENEW: '+enew.pp_links())
   Link.wing(E3, enew)
-  console.log('E3: '+E3.pp_links())
+  // console.log('E3: '+E3.pp_links())
   // console.log('ENEW: '+enew.pp_links())
   Link.wing(E4, enew)
-  console.log('E4: '+(Object.is(E4, E3)?'E3':E4.pp_links()))
-  console.log('ENEW: '+enew.pp_links())
+  // console.log('E4: '+(Object.is(E4, E3)?'E3':E4.pp_links()))
+  // console.log('ENEW: '+enew.pp_links())
   return enew
 }
 
@@ -177,20 +177,60 @@ function ESPLIT(E) {
   VNEW.ped = E
   // And finally the operation of splitting an edge at a midpoint into two edges became so important in forming T-Joints during hidden line elimination that the ESPLIT primitive was Introduced in place of the equivalent KLFE, MKEV, MKFE sequence.
   // KLFE()
+  // MKEV()
+  // MKFE()
 }
 
 // 6. F			← KLFE(ENEW); 	kill face & edge leaving a face.
 function KLFE(E) {
   let kface = E.nface
+  // console.log('killing face '+kface.pp()+' and edge '+E.pp())
   let F = E.pface
+  // console.log('keeping face '+F.pp())
+  // console.log('updating kface perimeter')
   let e2 = Fetch.F.ECW(E, kface)
   while(e2 !== E) {
-    if(Object.is(e2.nface, kface)) e2.nface = F
-    else e2.pface = F
+    // console.log(e2.pp_links())
+    if(Object.is(e2.nface, kface)) {
+      e2.nface = F
+      // console.log('^ updated nface')
+      // console.log(e2.pp_links())
+    } else {
+      e2.pface = F
+      // console.log('^ updated pface')
+      // console.log(e2.pp_links())
+    }
     e2 = Fetch.F.ECW(e2, kface)
   }
-  Link.wing(E.pccw, E.ncw)
-  Link.wing(E.pcw, E.nccw)
+  // console.log('updating wing links')
+  // console.log('for nvt end: '+E.pccw.pp()+' and '+E.ncw.pp())
+  if(Object.is(E.pccw, E.ncw)) {
+    if(Object.is(E.pccw.ncw, E)) {
+      E.pccw.ncw = null
+      E.pccw.pccw = null
+    } else {
+      E.pccw.nccw = null
+      E.pccw.pcw = null
+    }
+  } else {
+    Link.wing(E.pccw, E.ncw)
+  }
+  // console.log(E.pccw.pp_links())
+  // console.log(E.ncw.pp_links())
+  // console.log('for pvt end: '+E.pcw.pp()+' and '+E.nccw.pp())
+  if(Object.is(E.pcw, E.nccw)) {
+    if(Object.is(E.pcw.ncw, E)) {
+      E.pcw.ncw = null
+      E.pcw.pccw = null
+    } else {
+      E.pcw.nccw = null
+      E.pcw.pcw = null
+    }
+  } else {
+    Link.wing(E.pcw, E.nccw)
+  }
+  // console.log(E.pcw.pp_links())
+  // console.log(E.nccw.pp_links())
   BFEV_MAKE.KLF(kface)
   BFEV_MAKE.KLE(E)
   return F
