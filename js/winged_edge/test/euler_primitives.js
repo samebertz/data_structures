@@ -162,20 +162,24 @@ function MKFE(V1, F, V2) {
 // 5. VNEW 	← ESPLIT(E); 		split an edge.
 function ESPLIT(E) {
   // make vertex, edge, set new edge pvt and nvt and update old edge pvt or nvt, as well as set new edge pface and nface and wing pointers, and update old edge wing pointers
-  const VNEW = MKV(),
-        ENEW = MKE()
-  ENEW.nvt = E.nvt
-  ENEW.pvt = VNEW
-  E.nvt = VNEW
+  const B = GETB(E)
+  const VNEW = MKV(B),
+        ENEW = MKE(B)
+  ENEW.pvt = E.pvt
+  ENEW.nvt = VNEW
+  E.pvt = VNEW
   ENEW.nface = E.nface
   ENEW.pface = E.pface
-  ENEW.ncw = E.ncw
-  ENEW.pccw = E.pccw
-  ENEW.pcw = E
-  ENEW.nccw = E
-  E.ncw = ENEW
-  E.pccw = ENEW
-  VNEW.ped = E
+  if(Object.is(ENEW.pvt.ped, E))
+    ENEW.pvt.ped = ENEW
+  VNEW.ped = ENEW
+  Link.wing(ENEW, E.pcw)
+  Link.wing(ENEW, E.nccw)
+  E.nccw = ENEW
+  E.pcw = ENEW
+  ENEW.ncw = E
+  ENEW.pccw = E
+  return VNEW
   // And finally the operation of splitting an edge at a midpoint into two edges became so important in forming T-Joints during hidden line elimination that the ESPLIT primitive was Introduced in place of the equivalent KLFE, MKEV, MKFE sequence.
   // KLFE()
   // MKEV()
