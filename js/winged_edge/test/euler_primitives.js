@@ -66,6 +66,7 @@ function MKEV(F, V) {
 }
 
 // 4. ENEW 	← MKFE(V1,F,V2); make face & edge.
+// BUG: dependent on direction of edge when "closing" a wire polyhedron. XXX: just apply same restriction as on wire polyhedra that the ENEW can only start from the "positive" end (see figure 3.1 in README)
 function MKFE(V1, F, V2) {
   // console.log('V1: ',V1.pp())
   // console.log('V2: ',V2.pp())

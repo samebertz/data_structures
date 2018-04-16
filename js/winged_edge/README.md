@@ -432,7 +432,7 @@ Figure 3.3 - MKFE and KLFE.
 > " This primitive kills an edge and a vertex leaving one edge.
     This primitive will eliminate spurs made with MKEV and midpoints made
     with ESPLIT; in a pure form it would have to leave vertices with a
-    valence greater than two untouched, however it in face "un-pyramids"
+    valence greater than two untouched, however it in fact "un-pyramids"
     them with a series of KLFE's and then kills the remaining spur.
 
 `V ← KLVE(ENEW);` Kill Vertex Edge.
