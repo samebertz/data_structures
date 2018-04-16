@@ -18,8 +18,8 @@ function WING(E1, E2) {
   }
   function leads_left(E1, E2) {
     if (E1.nvt == E2.pvt && E1.pface == E2.pface) {
-      E1.pcw = E2
-      E2.pccw = E1
+      E1.pccw = E2
+      E2.pcw = E1
     }
   }
   function abut(E1, E2) {
