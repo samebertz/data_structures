@@ -20,6 +20,16 @@ Ring.prototype.delete = function(x) {
   x.prev = null
   this.length --
 }
+Ring.prototype.search = function(k) {
+  let x = this.head,
+      i = 0
+  while(x !== null && x.id !== k) {
+    if(i > this.length) return null
+    x = x.next
+    i++
+  }
+  return x
+}
 // TEMP: pretty print
 Ring.prototype.pp = function() {
   let cur = this.head, arr = []
