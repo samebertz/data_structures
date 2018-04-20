@@ -156,23 +156,26 @@ function ESPLIT(E) {
 // 6. F			← KLFE(ENEW); 	kill face & edge leaving a face.
 function KLFE(E) {
   let kface = E.nface
-  // console.log('killing face '+kface.pp()+' and edge '+E.pp())
+  console.log('killing face '+kface.pp()+' and edge '+E.pp())
   let F = E.pface
-  // console.log('keeping face '+F.pp())
+  console.log('keeping face '+F.pp())
   // console.log('updating kface perimeter')
   let e2 = Fetch.F.ECW(E, kface)
-  while(e2 !== E) {
-    // console.log(e2.pp_links())
+  while(!Object.is(e2, E)) {
+    console.log('e2 before update ' + e2.pp_links())
     if(Object.is(e2.nface, kface)) {
       e2.nface = F
-      // console.log('^ updated nface')
-      // console.log(e2.pp_links())
+      console.log('^ updated nface')
+      console.log('e2 after update ' + e2.pp_links())
     } else {
       e2.pface = F
-      // console.log('^ updated pface')
-      // console.log(e2.pp_links())
+      console.log('^ updated pface')
+      console.log('e2 after update ' + e2.pp_links())
     }
     e2 = Fetch.F.ECW(e2, kface)
+    console.log('next ECW e2: ' + e2.pp_links())
+    if(Object.is(e2, GETB(E).edges.search(1)))
+      break
   }
   // console.log('updating wing links')
   // console.log('for nvt end: '+E.pccw.pp()+' and '+E.ncw.pp())
@@ -213,16 +216,16 @@ function KLEV(V) {
   let kedge = V.ped,
       ecw = Fetch.V.ECW(kedge, V),
       eccw = Fetch.V.ECCW(kedge, V)
-  // console.log(V.pp()+' ped: '+kedge.pp())
-  // console.log((ecw?ecw.pp():'{null}')+' clockwise from '+
-  //   kedge.pp()+' about '+V.pp())
-  // console.log((eccw?eccw.pp():'{null}')+' counter-clockwise from '+
-  //   kedge.pp()+' about '+V.pp())
+  console.log(V.pp()+' ped: '+kedge.pp())
+  console.log((ecw?ecw.pp():'{null}')+' clockwise from '+
+    kedge.pp()+' about '+V.pp())
+  console.log((eccw?eccw.pp():'{null}')+' counter-clockwise from '+
+    kedge.pp()+' about '+V.pp())
 
   // TODO test this "unpyramid" loop
   if(ecw && eccw) {
     while(!Object.is(ecw, eccw)) {
-      // console.log('KLFE on '+ecw.pp()+' in KLEV on '+V.pp())
+      console.log('KLFE on '+ecw.pp()+' in KLEV on '+V.pp())
       KLFE(ecw)
       ecw = Fetch.V.ECW(ecw, V)
     }

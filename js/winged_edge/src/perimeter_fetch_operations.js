@@ -3,6 +3,7 @@ const F = {
 /***/ // E ← ECW(E, F);
 /***/ // Get Edge Clockwise from E about F's perimeter.
 /***/ ECW: function(E, F) {
+        console.log('getting edge clockwise from '+E.pp()+' about '+F.pp())
 /***/   return Object.is(E.nface, F) ? E.ncw : E.pcw
 /***/ },
 /***/ // E ← ECCW(E, F);
