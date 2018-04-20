@@ -25,9 +25,7 @@ function wing(E1, E2) {
     }
   }
   function abut(E1, E2) {
-    // console.log('checking if '+E1.pp_links()+' abuts '+E2.pp_links())
     if (E1.nvt == E2.nvt && E1.nface == E2.pface) {
-      console.log(E1.pp()+' abuts '+E2.pp())
       E1.ncw = E2
       E2.pccw = E1
     }
