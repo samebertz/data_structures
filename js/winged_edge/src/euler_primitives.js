@@ -166,46 +166,27 @@ function KLFE(enew) {
 }
 
 // 7. E 		← KLEV(VNEW); 	kill edge & Vertex leaving an edge.
-function KLEV(V) {
-  let kedge = V.ped,
-      ecw = Fetch.V.ECW(kedge, V),
-      eccw = Fetch.V.ECCW(kedge, V)
-  console.log(V.pp()+' ped: '+kedge.pp())
-  console.log((ecw?ecw.pp():'{null}')+' clockwise from '+
-    kedge.pp()+' about '+V.pp())
-  console.log((eccw?eccw.pp():'{null}')+' counter-clockwise from '+
-    kedge.pp()+' about '+V.pp())
-
-  // TODO test this "unpyramid" loop
-  if(ecw && eccw) {
-    while(!Object.is(ecw, eccw)) {
-      console.log('KLFE on '+ecw.pp()+' in KLEV on '+V.pp())
-      KLFE(ecw)
-      ecw = Fetch.V.ECW(ecw, V)
-    }
-  }
-
-  let patchvt = Object.is(kedge.nvt, V) ? kedge.pvt : kedge.nvt
-  if(ecw) {
-    if(Object.is(ecw.nvt, V)) {
-      ecw.nvt = patchvt
-    } else {
-      ecw.pvt = patchvt
-    }
-  }
-
-  // repair wing links for adjacent edges
-  // first get adjacent edges
-  // already have ecw and eccw about V
-  // so get ecw and eccw about patchvt
-  let ecw2 = Fetch.V.ECW(kedge, patchvt)
-  let eccw2 = Fetch.V.ECCW(kedge, patchvt)
-  Link.wing(ecw, eccw2)
-  Link.wing(eccw, ecw2)
-
-  BFEV_MAKE.KLV(V)
-  BFEV_MAKE.KLE(kedge)
-  return ecw
+// TODO: "un-pyramid"
+function KLEV(vnew) {
+  const enew = vnew.ped,
+        E = Fetch.V.ECCW(enew, vnew)
+  // orient edges as to match output of MKEV
+  if(!Object.is(enew.nvt, vnew)) Link.invert(enew)
+  if(!Object.is(E.pvt, vnew)) Link.invert(E)
+  // link E to enew.pvt
+  E.pvt = enew.pvt
+  const V = E.pvt
+  // link wings for newly adjacent edges
+  Link.wing(E, enew.pcw)
+  Link.wing(E, enew.nccw)
+  // replace enew if ped of face or vertex links
+  if(Object.is(V.ped, enew)) V.ped = E
+  if(Object.is(E.nface.ped, enew)) E.nface.ped = E
+  if(Object.is(E.pface.ped, enew)) E.pface.ped = E
+  // kill entities and return "repaired" edge
+  BFEV_MAKE.KLV(vnew)
+  BFEV_MAKE.KLE(enew)
+  return E
 }
 
 // 8. V 		← KLVE(ENEW); 	kill vertex & edge leaving a vertex.
