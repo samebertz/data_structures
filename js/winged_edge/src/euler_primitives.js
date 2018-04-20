@@ -68,110 +68,61 @@ function MKEV(F, V) {
 // 4. ENEW 	← MKFE(V1,F,V2); make face & edge.
 // BUG: dependent on direction of edge when "closing" a wire polyhedron. XXX: just apply same restriction as on wire polyhedra that the ENEW can only "point" to the "positive" end (see figure 3.1 in README)
 function MKFE(V1, F, V2) {
-  // console.log('V1: ',V1.pp())
-  // console.log('V2: ',V2.pp())
   const pbody = GETB(F)
+  // create new primitives
   const fnew = MKF(pbody)
   const enew = MKE(pbody)
-  console.log('========\nMKFE with FNEW: '+fnew.pp()+' and ENEW: '+enew.pp()+'\n')
-
+  // set vertex and face ptrs for enew
   enew.pvt = V1
   enew.nvt = V2
-  // const _ecw = Fetch.V.ECW(enew, V1)
   enew.pface = F
   enew.nface = fnew
-  // console.log(enew.pp_links())
+  // make enew accessible as ped on both F and fnew
   F.ped = enew
   fnew.ped = enew
-  // get wings of new edge
-  // first, get pcw by finding edge shared by V1 and F whose clockwise face is F
-  // start at an edge connected to V1
-  let E1 = V1.ped
-  // console.log('E1: '+E1.pp_links())
-  // and also keep track of the "old" next edge
-  let E2 = Fetch.V.ECW(E1, V1) || E1
-  // console.log(E2.pp())
-  // console.log('E2: '+(Object.is(E2, E1)?'E1':E2.pp_links()))
-  // stop if the current edge has clockwise face of F
-  // console.log('FCW(E1,V1) = ',Fetch.V.FCW(E1, V1).pp())
-  while(!Object.is(Fetch.V.FCW(E1, V1), F)) {
-    // if not, update the current edge
+  // find wings of enew
+  let E1, E2 = V1.ped
+  do {
     E1 = E2
-    // and the next edge
-    E2 = Fetch.V.ECW(E1, V1)
-  }
-  // do the same for V2
-  let E3 = V2.ped
-  // console.log('E3: '+E3.pp_links())
-  let E4 = Fetch.V.ECW(E3, V2) || E3
-  // console.log('E4: '+(Object.is(E4, E3)?'E3':E4.pp_links()))
-  // console.log('FCW(E3,V2) = ',Fetch.V.FCW(E3, V2).pp())
-  while(!Object.is(Fetch.V.FCW(E3, V2), F)) {
+    E2 = Fetch.V.ECW(E2, V1)
+  } while (!Object.is(Fetch.V.FCW(E1, V1), F));
+  // cont.
+  let E3, E4 = V2.ped
+  do {
     E3 = E4
-    E4 = Fetch.V.ECW(E3, V2)
-  }
-  // console.log('E3: '+E3.pp_links())
-  // console.log('E4: '+E4.pp_links())
-  // update face pointers for all edges of F that are now adjacent to FNEW
-  // SCAN CCW FROM V1 REPLACING F'S WITH FNEW;
-  // E←E2
-  // DO IF PFACE(E)=FACE THEN PFACE(E)←FNEW
-  //  ELSE NFACE(E)←FNEW;
-  // UNTIL E4=(E←ECCW(E,FNEW));
-  // start at E2
-  let E = E2
-  // console.log('E before update face: '+E.pp_links())
-  // update appropriate face pointer to FNEW
-  if(Object.is(E.pface,F))
-    E.pface = fnew
-  else
-    E.nface = fnew
-  // console.log('E after update face: '+E.pp_links())
-  // continue for each edge counter-clockwise about FNEW until E4,
-  // which is still adjacent to F
-  // E = Fetch.F.ECCW(E,fnew)
-  // console.log('E before update face: '+E.pp_links())
-  while(!Object.is(E, E4)) {
-    E = Fetch.F.ECCW(E,fnew)
-    console.log('E before update face: '+E.pp_links())
+    E4 = Fetch.V.ECW(E4, V2)
+  } while(!Object.is(Fetch.V.FCW(E3, V2), F))
+  // console.log('E1: ' + (E1 ? E1.pp_links() : E1))
+  // console.log('E2: ' + (E2 ? E2.pp_links() : E2))
+  // console.log('E3: ' + (E3 ? E3.pp_links() : E3))
+  // console.log('E4: ' + (E4 ? E4.pp_links() : E4))
+  // update face from F to fnew for perimeter of fnew
+  let E = E2 || E1
+  do {
+    // console.log('updating '+E.pp())
     if(Object.is(E.pface,F))
       E.pface = fnew
     else
       E.nface = fnew
-    console.log('E after update face: '+E.pp_links())
-  }
-  // console.log('E: '+E.pp_links())
-  // console.log('E1: '+E1.pp_links())
-  // console.log('E2: '+E2.pp_links())
-  // console.log('E3: '+E3.pp_links())
-  console.log('E4: '+E4.pp_links())
-  // then set the wing links for ENEW
-  console.log('ENEW: '+enew.pp_links())
-  console.log('======== begin MKFE wing link ========')
+    E = Fetch.F.ECCW(E,fnew)
+  } while(!Object.is(E, E4))
+  // link wings for enew
+  // console.log('E1 PRE: '+E1.pp_links())
+  // console.log('ENEW: '+enew.pp_links())
   Link.wing(E1, enew)
   // console.log('E1: '+E1.pp_links())
   // console.log('ENEW: '+enew.pp_links())
-  Link.wing(E2, enew)
-  // console.log('E2: '+(Object.is(E2, E1)?'E1':E2.pp_links()))
+  // console.log('E2 PRE: '+E2.pp_links())
+  if(E2) Link.wing(E2, enew)
+  // console.log('E2: '+E2.pp_links())
   // console.log('ENEW: '+enew.pp_links())
+  // console.log('E3 PRE: '+E3.pp_links())
   Link.wing(E3, enew)
   // console.log('E3: '+E3.pp_links())
   // console.log('ENEW: '+enew.pp_links())
+  // console.log('E4 PRE: '+E4.pp_links())
+  if(E4) Link.wing(E4, enew)
   // console.log('E4: '+E4.pp_links())
-  // console.log('ENEW: '+enew.pp_links())
-  Link.wing(E4, enew)
-  // console.log('E4: '+E4.pp_links())
-  // console.log('ENEW: '+enew.pp_links())
-  // console.log('E4: '+(Object.is(E4, E3)?'E3':E4.pp_links()))
-  // console.log('ENEW: '+enew.pp_links())
-  console.log('======== done MKFE wing link ========')
-  // console.log('E: '+E.pp_links())
-  // console.log('E1: '+E1.pp_links())
-  // console.log('E2: '+E2.pp_links())
-  // console.log('E3: '+E3.pp_links())
-  console.log('E4: '+E4.pp_links())
-  console.log('ENEW: '+enew.pp_links())
-  console.log('EXIT MKFE\n========')
   return enew
 }
 
