@@ -92,14 +92,9 @@ function MKFE(V1, F, V2) {
     E3 = E4
     E4 = Fetch.V.ECW(E4, V2)
   } while(!Object.is(Fetch.V.FCW(E3, V2), F))
-  // console.log('E1: ' + (E1 ? E1.pp_links() : E1))
-  // console.log('E2: ' + (E2 ? E2.pp_links() : E2))
-  // console.log('E3: ' + (E3 ? E3.pp_links() : E3))
-  // console.log('E4: ' + (E4 ? E4.pp_links() : E4))
   // update face from F to fnew for perimeter of fnew
   let E = E2 || E1
   do {
-    // console.log('updating '+E.pp())
     if(Object.is(E.pface,F))
       E.pface = fnew
     else
@@ -107,22 +102,10 @@ function MKFE(V1, F, V2) {
     E = Fetch.F.ECCW(E,fnew)
   } while(!Object.is(E, E4))
   // link wings for enew
-  // console.log('E1 PRE: '+E1.pp_links())
-  // console.log('ENEW: '+enew.pp_links())
   Link.wing(E1, enew)
-  // console.log('E1: '+E1.pp_links())
-  // console.log('ENEW: '+enew.pp_links())
-  // console.log('E2 PRE: '+E2.pp_links())
   if(E2) Link.wing(E2, enew)
-  // console.log('E2: '+E2.pp_links())
-  // console.log('ENEW: '+enew.pp_links())
-  // console.log('E3 PRE: '+E3.pp_links())
   Link.wing(E3, enew)
-  // console.log('E3: '+E3.pp_links())
-  // console.log('ENEW: '+enew.pp_links())
-  // console.log('E4 PRE: '+E4.pp_links())
   if(E4) Link.wing(E4, enew)
-  // console.log('E4: '+E4.pp_links())
   return enew
 }
 
@@ -154,60 +137,31 @@ function ESPLIT(E) {
 }
 
 // 6. F			← KLFE(ENEW); 	kill face & edge leaving a face.
-function KLFE(E) {
-  let kface = E.nface
-  console.log('killing face '+kface.pp()+' and edge '+E.pp())
-  let F = E.pface
-  console.log('keeping face '+F.pp())
-  // console.log('updating kface perimeter')
-  let e2 = Fetch.F.ECW(E, kface)
-  while(!Object.is(e2, E)) {
-    console.log('e2 before update ' + e2.pp_links())
-    if(Object.is(e2.nface, kface)) {
-      e2.nface = F
-      console.log('^ updated nface')
-      console.log('e2 after update ' + e2.pp_links())
-    } else {
-      e2.pface = F
-      console.log('^ updated pface')
-      console.log('e2 after update ' + e2.pp_links())
-    }
-    e2 = Fetch.F.ECW(e2, kface)
-    console.log('next ECW e2: ' + e2.pp_links())
-    if(Object.is(e2, GETB(E).edges.search(1)))
-      break
-  }
-  // console.log('updating wing links')
-  // console.log('for nvt end: '+E.pccw.pp()+' and '+E.ncw.pp())
-  if(Object.is(E.pccw, E.ncw)) {
-    if(Object.is(E.pccw.ncw, E)) {
-      E.pccw.ncw = null
-      E.pccw.pccw = null
-    } else {
-      E.pccw.nccw = null
-      E.pccw.pcw = null
-    }
-  } else {
-    Link.wing(E.pccw, E.ncw)
-  }
-  // console.log(E.pccw.pp_links())
-  // console.log(E.ncw.pp_links())
-  // console.log('for pvt end: '+E.pcw.pp()+' and '+E.nccw.pp())
-  if(Object.is(E.pcw, E.nccw)) {
-    if(Object.is(E.pcw.ncw, E)) {
-      E.pcw.ncw = null
-      E.pcw.pccw = null
-    } else {
-      E.pcw.nccw = null
-      E.pcw.pcw = null
-    }
-  } else {
-    Link.wing(E.pcw, E.nccw)
-  }
-  // console.log(E.pcw.pp_links())
-  // console.log(E.nccw.pp_links())
-  BFEV_MAKE.KLF(kface)
-  BFEV_MAKE.KLE(E)
+function KLFE(enew) {
+  // retrieve all the links, essentially everything attached to enew in MKFE
+  const F = enew.pface, fnew = enew.nface,
+        V1 = enew.pvt, V2 = enew.nvt,
+        E1 = enew.pcw, E2 = enew.nccw,
+        E3 = enew.ncw, E4 = enew.pccw
+  // replace enew if ped of face or vertex links
+  if(Object.is(F.ped, enew)) F.ped = E3
+  if(Object.is(V1.ped, enew)) V1.ped = E1
+  if(Object.is(V2.ped, enew)) V2.ped = E3
+  // starting with E2 and going ccw about fnew's perimeter, replace fnew with F
+  let E = E2
+  do {
+    if(Object.is(E.pface, fnew))
+      E.pface = F
+    else
+      E.nface = F
+    E = Fetch.F.ECCW(E, fnew)
+  } while(!Object.is(E, E4))
+  // link wings for adjacent edges
+  Link.wing(E1, E2)
+  Link.wing(E3, E4)
+  // kill entities and return "repaired" face
+  BFEV_MAKE.KLF(fnew)
+  BFEV_MAKE.KLE(enew)
   return F
 }
 
