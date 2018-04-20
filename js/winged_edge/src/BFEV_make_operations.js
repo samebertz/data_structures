@@ -8,6 +8,7 @@ const GETB = require('./parts_tree_accessing').GETB
 function MKB() {
   return new Body
 }
+
 function make_component(B, C) {
   const c = new C
   c.id = B[C.name.toLowerCase()+'s'].length
@@ -17,6 +18,7 @@ function make_component(B, C) {
 function kill_component(C, Type) {
   GETB(C)[Type.name.toLowerCase()+'s'].delete(C)
 }
+
 function MKF(B) {
   return make_component(B, Face)
 }
@@ -28,6 +30,7 @@ function MKE(B) {
 function MKV(B) {
   return make_component(B, Vertex)
 }
+
 function KLF(F) {
   return kill_component(F, Face)
 }
