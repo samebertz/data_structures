@@ -1,5 +1,5 @@
 const Node = require('./node')
-const TYPES = require('./constants')
+const TYPES = require('../constants')
 function Face() {
   this.type = TYPES.FACE
   this.ped  = null

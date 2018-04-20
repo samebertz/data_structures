@@ -1,4 +1,4 @@
-const TYPES = require('./constants')
+const TYPES = require('../constants')
 function Node() {
   this.id   = null
   this.next = null

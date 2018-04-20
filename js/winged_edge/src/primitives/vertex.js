@@ -1,5 +1,5 @@
 const Node = require('./node')
-const TYPES = require('./constants')
+const TYPES = require('../constants')
 function Vertex(x,y,z) {
   this.type = TYPES.VERTEX
   this.x    = x

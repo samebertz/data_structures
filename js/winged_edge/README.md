@@ -422,7 +422,7 @@ Figure 3.3 - MKFE and KLFE.
     new edge. Its implementation is very similar to the midpoint example
     on page 19. ESPLIT is heavily used in the hidden line eliminator. "
 
-`F ← KLFE(E.EW);` Kill Face Edge.
+`F ← KLFE(ENEW);` Kill Face Edge.
 > " This primitive kills a face and an edge leaving one face.
     Since this primitive is intended to be an inverse of MKFE, the NFACE
     of ENEW is killed. However the NFACE and PFACE of an edge may be
@@ -432,7 +432,7 @@ Figure 3.3 - MKFE and KLFE.
 > " This primitive kills an edge and a vertex leaving one edge.
     This primitive will eliminate spurs made with MKEV and midpoints made
     with ESPLIT; in a pure form it would have to leave vertices with a
-    valence greater than two untouched, however it in face "un-pyramids"
+    valence greater than two untouched, however it in fact "un-pyramids"
     them with a series of KLFE's and then kills the remaining spur.
 
 `V ← KLVE(ENEW);` Kill Vertex Edge.
