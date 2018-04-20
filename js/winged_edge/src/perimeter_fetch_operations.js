@@ -8,6 +8,8 @@ const F = {
 /***/ // E ← ECCW(E, F);
 /***/ // Get Edge Counter Clockwise from E about F's perimeter.
 /***/ ECCW: function(E, F) {
+        console.log('fetching edge counterclockwise from '+E.pp()+' about '+F.pp())
+        console.log(E.pp_links())
 /***/   return Object.is(E.nface, F) ? E.nccw : E.pccw
 /***/ },
 /***/ // V ← VCW(E, F);
@@ -27,6 +29,7 @@ const V = {
 /***/ // E ← ECW(E, V);
 /***/ // Get Edge Clockwise from E about V's perimeter.
 /***/ ECW: function(E, V) {
+        // console.log('fetching edge clockwise from '+E.pp()+' about '+V.pp())
 /***/   return Object.is(E.nvt, V) ? E.pccw : E.nccw
 /***/ },
 /***/ // E ← ECCW(E, V);

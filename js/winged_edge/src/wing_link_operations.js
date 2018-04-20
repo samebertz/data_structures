@@ -1,4 +1,6 @@
-function WING(E1, E2) {
+function wing(E1, E2) {
+  // console.log('E1: '+E1.pp_links())
+  // console.log('E2: '+E2.pp_links())
   // taking advantage of the symmetry here
   // ? commutativity of the binary functions ?
   // or something... anyway essentially there's
@@ -23,7 +25,9 @@ function WING(E1, E2) {
     }
   }
   function abut(E1, E2) {
+    // console.log('checking if '+E1.pp_links()+' abuts '+E2.pp_links())
     if (E1.nvt == E2.nvt && E1.nface == E2.pface) {
+      console.log(E1.pp()+' abuts '+E2.pp())
       E1.ncw = E2
       E2.pccw = E1
     }
@@ -35,20 +39,20 @@ function WING(E1, E2) {
     }
   }
 
-  leads_right(E1, E2)
-  leads_right(E2, E1)
-
-  leads_left(E1, E2)
-  leads_left(E2, E1)
-
-  abut(E1, E2)
-  abut(E2, E1)
-
-  spread(E1, E2)
-  spread(E2, E1)
+  /***/ leads_right(E1, E2)
+  /***/ leads_right(E2, E1)
+  /***/
+  /***/ leads_left(E1, E2)
+  /***/ leads_left(E2, E1)
+  /***/
+  /***/ abut(E1, E2)
+  /***/ abut(E2, E1)
+  /***/
+  /***/ spread(E1, E2)
+  /***/ spread(E2, E1)
 }
 
-function INVERT(E) {
+function invert(E) {
   let t = E.nvt
   E.nvt = E.pvt
   E.pvt = t
@@ -63,4 +67,4 @@ function INVERT(E) {
   E.pccw = t
 }
 
-module.exports = { WING, INVERT }
+module.exports = { wing, invert }

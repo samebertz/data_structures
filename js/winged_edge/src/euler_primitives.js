@@ -66,13 +66,15 @@ function MKEV(F, V) {
 }
 
 // 4. ENEW 	← MKFE(V1,F,V2); make face & edge.
-// BUG: dependent on direction of edge when "closing" a wire polyhedron. XXX: just apply same restriction as on wire polyhedra that the ENEW can only start from the "positive" end (see figure 3.1 in README)
+// BUG: dependent on direction of edge when "closing" a wire polyhedron. XXX: just apply same restriction as on wire polyhedra that the ENEW can only "point" to the "positive" end (see figure 3.1 in README)
 function MKFE(V1, F, V2) {
   // console.log('V1: ',V1.pp())
   // console.log('V2: ',V2.pp())
   const pbody = GETB(F)
   const fnew = MKF(pbody)
   const enew = MKE(pbody)
+  console.log('========\nMKFE with FNEW: '+fnew.pp()+' and ENEW: '+enew.pp()+'\n')
+
   enew.pvt = V1
   enew.nvt = V2
   // const _ecw = Fetch.V.ECW(enew, V1)
@@ -131,19 +133,21 @@ function MKFE(V1, F, V2) {
   // console.log('E before update face: '+E.pp_links())
   while(!Object.is(E, E4)) {
     E = Fetch.F.ECCW(E,fnew)
-    // console.log('E before update face: '+E.pp_links())
+    console.log('E before update face: '+E.pp_links())
     if(Object.is(E.pface,F))
       E.pface = fnew
     else
       E.nface = fnew
-    // console.log('E after update face: '+E.pp_links())
+    console.log('E after update face: '+E.pp_links())
   }
   // console.log('E: '+E.pp_links())
   // console.log('E1: '+E1.pp_links())
   // console.log('E2: '+E2.pp_links())
   // console.log('E3: '+E3.pp_links())
-  // console.log('E4: '+E4.pp_links())
+  console.log('E4: '+E4.pp_links())
   // then set the wing links for ENEW
+  console.log('ENEW: '+enew.pp_links())
+  console.log('======== begin MKFE wing link ========')
   Link.wing(E1, enew)
   // console.log('E1: '+E1.pp_links())
   // console.log('ENEW: '+enew.pp_links())
@@ -153,9 +157,21 @@ function MKFE(V1, F, V2) {
   Link.wing(E3, enew)
   // console.log('E3: '+E3.pp_links())
   // console.log('ENEW: '+enew.pp_links())
+  // console.log('E4: '+E4.pp_links())
+  // console.log('ENEW: '+enew.pp_links())
   Link.wing(E4, enew)
+  // console.log('E4: '+E4.pp_links())
+  // console.log('ENEW: '+enew.pp_links())
   // console.log('E4: '+(Object.is(E4, E3)?'E3':E4.pp_links()))
   // console.log('ENEW: '+enew.pp_links())
+  console.log('======== done MKFE wing link ========')
+  // console.log('E: '+E.pp_links())
+  // console.log('E1: '+E1.pp_links())
+  // console.log('E2: '+E2.pp_links())
+  // console.log('E3: '+E3.pp_links())
+  console.log('E4: '+E4.pp_links())
+  console.log('ENEW: '+enew.pp_links())
+  console.log('EXIT MKFE\n========')
   return enew
 }
 
@@ -243,7 +259,45 @@ function KLFE(E) {
 
 // 7. E 		← KLEV(VNEW); 	kill edge & Vertex leaving an edge.
 function KLEV(V) {
+  let kedge = V.ped,
+      ecw = Fetch.V.ECW(kedge, V),
+      eccw = Fetch.V.ECCW(kedge, V)
+  // console.log(V.pp()+' ped: '+kedge.pp())
+  // console.log((ecw?ecw.pp():'{null}')+' clockwise from '+
+  //   kedge.pp()+' about '+V.pp())
+  // console.log((eccw?eccw.pp():'{null}')+' counter-clockwise from '+
+  //   kedge.pp()+' about '+V.pp())
 
+  // TODO test this "unpyramid" loop
+  if(ecw && eccw) {
+    while(!Object.is(ecw, eccw)) {
+      // console.log('KLFE on '+ecw.pp()+' in KLEV on '+V.pp())
+      KLFE(ecw)
+      ecw = Fetch.V.ECW(ecw, V)
+    }
+  }
+
+  let patchvt = Object.is(kedge.nvt, V) ? kedge.pvt : kedge.nvt
+  if(ecw) {
+    if(Object.is(ecw.nvt, V)) {
+      ecw.nvt = patchvt
+    } else {
+      ecw.pvt = patchvt
+    }
+  }
+
+  // repair wing links for adjacent edges
+  // first get adjacent edges
+  // already have ecw and eccw about V
+  // so get ecw and eccw about patchvt
+  let ecw2 = Fetch.V.ECW(kedge, patchvt)
+  let eccw2 = Fetch.V.ECCW(kedge, patchvt)
+  Link.wing(ecw, eccw2)
+  Link.wing(eccw, ecw2)
+
+  BFEV_MAKE.KLV(V)
+  BFEV_MAKE.KLE(kedge)
+  return ecw
 }
 
 // 8. V 		← KLVE(ENEW); 	kill vertex & edge leaving a vertex.
