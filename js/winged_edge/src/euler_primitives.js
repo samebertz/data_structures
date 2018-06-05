@@ -170,6 +170,19 @@ function KLFE(enew) {
 function KLEV(vnew) {
   const enew = vnew.ped,
         E = Fetch.V.ECCW(enew, vnew)
+  // "un-pyramid"
+  // TODO: delete remaining spur. just a diff logic when a pyramid i think.
+  // since won't be patching E or anything, but will be patching anything
+  // adjacent to enew that the KLFE calls didn't get.
+  // maybe could devolve pyramid to a single split edge, KLEV that, then KLFE
+  // the "repaired" edge?
+  let E2 = Fetch.V.ECW(enew, vnew) || E,
+      E3 = E2
+  while(!Object.is(E2, E)) {
+    KLFE(E2)
+    E2 = Fetch.V.ECW(E3, vnew)
+    E3 = E2
+  }
   // orient edges as to match output of MKEV
   if(!Object.is(enew.nvt, vnew)) Link.invert(enew)
   if(!Object.is(E.pvt, vnew)) Link.invert(E)

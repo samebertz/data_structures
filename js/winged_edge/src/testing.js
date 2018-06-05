@@ -137,43 +137,74 @@ let test_mkfe_fnew = test_mkfe_enew.nface
 // console.log(test_esplit_enew.pp_links())
 // console.log(test_mkev_enew2.pp_links())
 // console.log(test_bfv.edges.pp())
-console.log('begin constructing pyramid from square\n========')
-let test_mkev_vnew_p = Euler.MKEV(test_bfv.nface, test_mkev_vnew)
-console.log(test_mkev_vnew_p.pp())
-let test_mkev_enew_p1 = test_mkev_vnew_p.ped
-console.log(test_mkev_enew_p1.pp_links())
-
-let test_mkfe_enew_p2 = Euler.MKFE(test_mkev_vnew2, test_bfv.nface, test_mkev_vnew_p)
-console.log(test_mkfe_enew_p2.pp_links())
-let test_mkfe_fnew_p1 = test_mkfe_enew_p2.nface
-console.log(test_mkfe_fnew_p1.pp())
-
-let test_mkfe_enew_p3 = Euler.MKFE(test_mkev_vnew3, test_bfv.nface, test_mkev_vnew_p)
-console.log(test_mkfe_enew_p3.pp_links())
-let test_mkfe_fnew_p2 = test_mkfe_enew_p3.nface
-console.log(test_mkfe_fnew_p2.pp())
-
-let test_mkfe_enew_p4 = Euler.MKFE(test_bfv.nvt, test_bfv.nface, test_mkev_vnew_p)
-console.log(test_mkfe_enew_p4.pp_links())
-let test_mkfe_fnew_p3 = test_mkfe_enew_p4.nface
-console.log(test_mkfe_fnew_p3.pp())
-console.log('done constructing pyramid from square\n========')
-console.log('begin testing KLEV\n========')
-// console.log(test_mkev_enew.pp_links())
-// console.log(test_esplit_enew.pp_links())
-// console.log(test_mkev_enew2.pp_links())
+// console.log('begin constructing pyramid from square\n========')
+// let test_mkev_vnew_p = Euler.MKEV(test_bfv.nface, test_mkev_vnew)
+// console.log(test_mkev_vnew_p.pp())
+// let test_mkev_enew_p1 = test_mkev_vnew_p.ped
+// console.log(test_mkev_enew_p1.pp_links())
+//
+// let test_mkfe_enew_p2 = Euler.MKFE(test_mkev_vnew2, test_bfv.nface, test_mkev_vnew_p)
+// console.log(test_mkfe_enew_p2.pp_links())
+// let test_mkfe_fnew_p1 = test_mkfe_enew_p2.nface
+// console.log(test_mkfe_fnew_p1.pp())
+//
+// let test_mkfe_enew_p3 = Euler.MKFE(test_mkev_vnew3, test_bfv.nface, test_mkev_vnew_p)
+// console.log(test_mkfe_enew_p3.pp_links())
+// let test_mkfe_fnew_p2 = test_mkfe_enew_p3.nface
+// console.log(test_mkfe_fnew_p2.pp())
+//
+// let test_mkfe_enew_p4 = Euler.MKFE(test_bfv.nvt, test_bfv.nface, test_mkev_vnew_p)
+// console.log(test_mkfe_enew_p4.pp_links())
+// let test_mkfe_fnew_p3 = test_mkfe_enew_p4.nface
+// console.log(test_mkfe_fnew_p3.pp())
+// console.log('done constructing pyramid from square\n========')
+// console.log('begin testing KLEV\n========')
+// // console.log(test_mkev_enew.pp_links())
+// // console.log(test_esplit_enew.pp_links())
+// // console.log(test_mkev_enew2.pp_links())
+// console.log(test_bfv.faces.pp())
 // console.log(test_bfv.edges.pp())
 // console.log(test_bfv.vertexs.pp())
-// console.log(test_esplit_vnew.pp())
-let test_klev_e = Euler.KLEV(test_mkev_vnew_p)
-// console.log(test_klev_e.pp_links())
-// console.log(test_mkev_enew.pp_links())
-// console.log(test_esplit_enew.pp_links())
-// console.log(test_mkev_enew2.pp_links())
+// // console.log(test_esplit_vnew.pp())
+// let test_klev_e = Euler.KLEV(test_mkev_vnew_p)
+// // console.log(test_klev_e.pp_links())
+// // console.log(test_mkev_enew.pp_links())
+// // console.log(test_esplit_enew.pp_links())
+// // console.log(test_mkev_enew2.pp_links())
+// console.log(test_bfv.faces.pp())
 // console.log(test_bfv.edges.pp())
 // console.log(test_bfv.vertexs.pp())
-// console.log(test_esplit_vnew.pp())
-console.log('done testing KLEV\n========')
+// // console.log(test_esplit_vnew.pp())
+//
+// console.log('test2')
+// let test2_bfv = Euler.MKBFV()
+// // console.log('%O',test2_bfv)
+// console.log(test2_bfv.pp(), test2_bfv.nface.pp(), test2_bfv.nvt.pp())
+// console.log(test2_bfv.faces.pp())
+// console.log(test2_bfv.edges.pp())
+// console.log(test2_bfv.vertexs.pp())
+// let test2_mkev_vnew = Euler.MKEV(test2_bfv.nface, test2_bfv.nvt)
+// console.log(test2_mkev_vnew.pp())
+// let test2_mkev_enew = test2_mkev_vnew.ped
+// console.log(test2_mkev_enew.pp())
+// console.log(test2_mkev_enew.pp_links())
+// let test2_mkev_vnew2 = Euler.MKEV(test2_bfv.nface, test2_mkev_vnew)
+// console.log(test2_mkev_vnew2.pp())
+// let test2_mkev_enew2 = test2_mkev_vnew2.ped
+// console.log(test2_mkev_enew.pp_links())
+// console.log(test2_mkev_enew2.pp_links())
+// let test2_klev_e = Euler.KLEV(test2_mkev_vnew2)
+// console.log(test2_klev_e ? test2_klev_e.pp() : 'null')
+// console.log(test2_mkev_vnew2.pp())
+// console.log(test2_mkev_enew.pp_links())
+// console.log(test2_mkev_enew2.pp_links())
+// console.log(test2_bfv.pp(), test2_bfv.nface.pp(), test2_bfv.nvt.pp())
+// console.log(test2_bfv.faces.pp())
+// console.log(test2_bfv.edges.pp())
+// console.log(test2_bfv.vertexs.pp())
+// // console.log('%O', test2_bfv)
+//
+// console.log('done testing KLEV\n========')
 console.log('done testing euler_primitives\n========')
 
 // =============

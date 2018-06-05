@@ -6,6 +6,16 @@ function Edge() {
   this.nvt   = this.pvt   = null
   this.ncw   = this.pcw   = null
   this.nccw  = this.pccw  = null
+  Object.defineProperties(this, {
+    'ned': {
+      get() {return this.next},
+      set(v) {this.next = v}
+    },
+    'ped': {
+      get() {return this.prev},
+      set(v) {this.prev = v}
+    }
+  })
 }
 Edge.prototype = new Node
 Edge.prototype.pp_links = function() {
