@@ -12,7 +12,7 @@ Ring.prototype.search = function(k) {
   let x = this.head,
       i = 0
   while(x !== null && x.key !== k) {
-    if(i > this.length) return null
+    if(i >= this.length) return null
     x = x.next
     i++
   }
@@ -33,15 +33,17 @@ Ring.prototype.insert = function(x) {
 }
 Ring.prototype.delete = function(x) {
   if(this.length > 1) {
+    if(this.head === x) {
+      this.head = x.next
+    }
     x.prev.next = x.next
     x.next.prev = x.prev
-    x.next = null
-    x.prev = null
-    this.length --
   } else {
     this.head = null
-    this.length = 0
   }
+  x.next = null
+  x.prev = null
+  this.length --
 }
 
 module.exports = { Node, Ring }
